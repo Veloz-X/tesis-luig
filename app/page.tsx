@@ -16,7 +16,7 @@ export default function Home() {
       height={500}
       alt="ups-logo"
     />
-      <div>"ANÁLISIS DE TÉCNICAS Y ESTRATEGIAS DE SEGURIDADES IOT EN DISPOSITIVOS PARA PROTEGER LOS DATOS TRANSMITIDO</div>
+      <div>ANÁLISIS DE TÉCNICAS Y ESTRATEGIAS DE SEGURIDADES IOT EN DISPOSITIVOS PARA PROTEGER LOS DATOS TRANSMITIDO</div>
       <div className="grid w-full max-w-sm items-center gap-1.5 mx-auto">
         <Label htmlFor="email">Correo</Label>
         <Input type="email" id="email" placeholder="Email" />
