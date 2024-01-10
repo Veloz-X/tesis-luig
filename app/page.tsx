@@ -3,10 +3,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SendHorizonal } from 'lucide-react'
 import Image from 'next/image'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Home() {
   return (
+    
     <div className="flex flex-col items-center justify-center h-screen">
+      <div>
+      <SpeedInsights/>
+      </div>
       <div className="mb-8">
         <Image
           src="/ups-logo.png"
