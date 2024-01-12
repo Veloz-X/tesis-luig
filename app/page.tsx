@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label'
 import { SendHorizonal } from 'lucide-react'
 import Image from 'next/image'
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -12,35 +13,39 @@ export default function Home() {
       <div>
       <SpeedInsights/>
       </div>
-      <div className="mb-8">
+      <div className="mb-4">
         <Image
           src="/ups-logo.png"
-          width={400}
-          height={400}
+          width={200}
+          height={150}
           alt="ups-logo"
         />
       </div>
       
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">
+      <div className="text-center my-6">
+        <div className="text-2xl font-bold w-1/2 mx-auto flex">
           ANÁLISIS DE TÉCNICAS Y ESTRATEGIAS DE SEGURIDAD EN DISPOSITIVOS IOT PARA PROTEGER LOS DATOS TRANSMITIDOS
-        </h1>
+        </div>
       </div>
       
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="email">Correo</Label>
+      <div className="grid w-full max-w-sm items-center gap-1.5 space-y-1 pb-3">
+        <Label htmlFor="email" className='font-semibold'>Correo</Label>
         <Input type="email" id="email" placeholder="Email" />
       </div>
       
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor="password">Contraseña</Label>
+      <div className="grid w-full max-w-sm items-center gap-1.5 space-y-1">
+        <Label htmlFor="password" className='font-semibold'>Contraseña</Label>
         <Input type="password" id="password" placeholder="Contraseña" />
       </div>
+      
+
       <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Link href="/admin">
       <Button className="w-full mt-4">
         Ingresar
         <SendHorizonal className="ml-2 h-4 w-4" />
       </Button>
+      </Link>
       </div>
       
       
