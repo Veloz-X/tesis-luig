@@ -58,7 +58,7 @@ export default function Home() {
         </div>
       </div>
       
-      <form onSubmit={handleSubmit} className="w-1/2">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm items-center">
       <div className="grid w-full max-w-sm items-center gap-1.5 space-y-1 pb-3">
         <Label htmlFor="email" className='font-semibold'>Correo</Label>
         <Input type="email" id="email" placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)}/>
