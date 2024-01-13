@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Analytics } from '@vercel/analytics/react';
+import SessionAuthProvider from '@/context/SessionAuthProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={inter.className}>{children}<Analytics /></body>
+      <body className={inter.className}>
+        <SessionAuthProvider>
+        {children}<Analytics />
+        </SessionAuthProvider>
+        
+
+      </body>
     </html>
   )
 }
