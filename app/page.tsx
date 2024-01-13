@@ -22,8 +22,8 @@ export default function Home() {
         />
       </div>
       
-      <div className="text-center my-6">
-        <div className="text-2xl font-bold w-1/2 mx-auto flex">
+      <div className="text-center my-4">
+        <div className="text-2xl font-bold w-1/2 mx-auto flex ">
           ANÁLISIS DE TÉCNICAS Y ESTRATEGIAS DE SEGURIDAD EN DISPOSITIVOS IOT PARA PROTEGER LOS DATOS TRANSMITIDOS
         </div>
       </div>
@@ -37,7 +37,6 @@ export default function Home() {
         <Label htmlFor="password" className='font-semibold'>Contraseña</Label>
         <Input type="password" id="password" placeholder="Contraseña" />
       </div>
-      
 
       <div className="grid w-full max-w-sm items-center gap-1.5">
       <Link href="/admin">
@@ -46,6 +45,10 @@ export default function Home() {
         <SendHorizonal className="ml-2 h-4 w-4" />
       </Button>
       </Link>
+      <div className='text-center py-4 font-semibold'>
+      <div className='text-sm'>Ing. Luigi Emanuel Bohorquez Reyes</div>
+        <div className='text-sm'>Ing. Kristy Johely Alcivar Alvarado</div>
+      </div>
       </div>
       
       
