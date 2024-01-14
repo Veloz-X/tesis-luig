@@ -7,8 +7,9 @@ import Image from 'next/image'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Link from 'next/link'
 import { CardsMetric } from './components/metric'
-import { CardsDataTable } from './components/data-table'
+import { CardsDataTableSecurity } from './components/data-security'
 import { signOut,useSession } from "next-auth/react";
+import { CardsDataTableSensor } from './components/data-sensor'
 export default function Home() {
   const { data: session, status } = useSession();
   return (
@@ -16,7 +17,7 @@ export default function Home() {
     <div className='w-full flex bg-gray-100'>
       <div className='w-1/2  p-3'>
       <div className='py-3'>
-        <CardsDataTable/>
+        <CardsDataTableSecurity/>
       </div>
 
       </div>
@@ -35,7 +36,7 @@ export default function Home() {
         <CardsMetric/>
       </div>
       <div className='py-3'>
-        <CardsDataTable/>
+        <CardsDataTableSensor/>
       </div>
 
       </div>

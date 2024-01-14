@@ -1,6 +1,6 @@
 'use client'
 import { useTheme } from "next-themes"
-import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts"
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip ,XAxis,YAxis} from "recharts"
 
 // import { useConfig } from "@/hooks/use-config"
 
@@ -9,32 +9,39 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 const data = [
   {
-    average: 400,
-    today: 240,
+    temperature: 200,
+    humidity: 240,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
   {
-    average: 300,
-    today: 139,
+    temperature: 12.22,
+    humidity: 139,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
   {
-    average: 200,
-    today: 980,
+    temperature: 200,
+    humidity: 500,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
   {
-    average: 278,
-    today: 390,
+    temperature: 278,
+    humidity: 390,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
   {
-    average: 189,
-    today: 480,
+    temperature: 189,
+    humidity: 480,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
   {
-    average: 239,
-    today: 380,
+    temperature: 239,
+    humidity: 380,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
   {
-    average: 349,
-    today: 430,
+    temperature: 349,
+    humidity: 430,
+    createDate: "2021-09-01T00:00:00.000Z"
   },
 ]
 
@@ -49,7 +56,7 @@ export function CardsMetric() {
       <CardHeader>
         <CardTitle>Grafica de Temperatura y Humedad</CardTitle>
         <CardDescription>
-        Tus minutos de ejercicio están por delante de lo que normalmente estás.
+        Da click en Actualizar para ver los ultimos datos
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-4">
@@ -64,6 +71,10 @@ export function CardsMetric() {
                 bottom: 0,
               }}
             >
+              <XAxis dataKey="name"/>
+    <YAxis/>
+              <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+              
               <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
@@ -72,18 +83,18 @@ export function CardsMetric() {
                         <div className="grid grid-cols-2 gap-2">
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Average
+                              Temperatura
                             </span>
                             <span className="font-bold text-muted-foreground">
-                              {payload[0].value}
+                              {payload[0].value} C°
                             </span>
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Today
+                              Humedad
                             </span>
                             <span className="font-bold">
-                              {payload[1].value}
+                              {payload[1].value} C°
                             </span>
                           </div>
                         </div>
@@ -97,7 +108,7 @@ export function CardsMetric() {
               <Line
                 type="monotone"
                 strokeWidth={2}
-                dataKey="average"
+                dataKey="temperature"
                 activeDot={{
                   r: 6,
                   style: { fill: "var(--theme-primary)", opacity: 0.25 },
@@ -114,7 +125,7 @@ export function CardsMetric() {
               />
               <Line
                 type="monotone"
-                dataKey="today"
+                dataKey="humidity"
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
