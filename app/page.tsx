@@ -8,11 +8,12 @@ import { SendHorizonal } from 'lucide-react'
 import Image from 'next/image'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Link from 'next/link'
-import { signIn } from "next-auth/react";
+import { signIn,useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const [errors, setErrors] = useState<string[]>([]);
   const [email, setEmail] = useState<string>("admin@fastery.dev");
   const [password, setPassword] = useState<string>("Abc123");
@@ -41,6 +42,7 @@ export default function Home() {
     
     <div className="flex flex-col items-center justify-center h-screen">
       <div>
+        {session ? 'Sesión iniciada' : 'No hay sesión'}
       <SpeedInsights/>
       </div>
       <div className="mb-4">

@@ -47,7 +47,7 @@ const data: Payment[] = [
     updateDate: "2024-01-13T19:11:52.363Z"
   },
   {
-    sensorStatus: true,
+    sensorStatus: false,
     temperature: 25.36,
     humidity: 32.42,
     id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
@@ -63,7 +63,7 @@ const data: Payment[] = [
     updateDate: "2024-01-13T19:11:52.363Z"
   },
   {
-    sensorStatus: true,
+    sensorStatus: false,
     temperature: 25.36,
     humidity: 32.42,
     id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
@@ -146,7 +146,7 @@ export const columns: ColumnDef<Payment>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("sensorStatus")}</div>,
+    cell: ({ row }) => <div className="">{row.getValue("sensorStatus")==true?'Conetado':'Desconectado'}</div>,
   },
 ]
 
