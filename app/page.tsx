@@ -42,7 +42,7 @@ export default function Home() {
     
     <div className="flex flex-col items-center justify-center h-screen">
       <div>
-        {session ? 'Sesión iniciada' : 'No hay sesión'}
+        {/* {session ? 'Sesión iniciada' : 'No hay sesión'} */}
       <SpeedInsights/>
       </div>
       <div className="mb-4">
