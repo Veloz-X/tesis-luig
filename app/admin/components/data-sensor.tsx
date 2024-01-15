@@ -2,11 +2,6 @@
 
 import * as React from "react"
 import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
-import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -20,75 +15,24 @@ import {
 } from "@tanstack/react-table"
 
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge"
+import { Signal, WifiOff } from "lucide-react"
 
-const getCats = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sensors?offset=0&limit=25`, {
-    method: "GET",
-  });
-  const data = await res.json();
-  console.log(data);
-  return data;
+const getDataSensor = async (): Promise<Sensor[]> => {
+  const sensor  = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/sensors?offset=0&limit=10`
+  );
+  const sensorJson: Sensor[] = await sensor.json();
+  console.log(sensorJson);
+  return sensorJson;
 };
 
-const data: Sensor[] = [
-  {
-    sensorStatus: true,
-    temperature: 25.36,
-    humidity: 32.42,
-    id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z"
-  },
-  {
-    sensorStatus: false,
-    temperature: 25.36,
-    humidity: 32.42,
-    id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z"
-  },
-  {
-    sensorStatus: true,
-    temperature: 25.36,
-    humidity: 32.42,
-    id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z"
-  },
-  {
-    sensorStatus: false,
-    temperature: 25.36,
-    humidity: 32.42,
-    id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z"
-  },
-  {
-    sensorStatus: true,
-    temperature: 25.36,
-    humidity: 32.42,
-    id: "20fa4b39-34aa-4649-8d0b-4b4e6a656c08",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z"
-  },
-]
 
 
 export type Sensor = {
@@ -115,7 +59,7 @@ export const columns: ColumnDef<Sensor>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("humidity")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("humidity")}</div>,
   },
   {
     accessorKey: "temperature",
@@ -129,7 +73,7 @@ export const columns: ColumnDef<Sensor>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("temperature")}</div>,
+    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("temperature")}</div>,
   },
   {
     accessorKey: "createDate",
@@ -137,13 +81,17 @@ export const columns: ColumnDef<Sensor>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Fecha
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("createDate")}</div>,
+    cell: ({ row }) => {
+      const utcDate = new Date(row.getValue("createDate"));
+      const ecuadorDate = new Date(utcDate.toLocaleString("en-US", { timeZone: "America/Guayaquil" }));
+      const formattedDate = ecuadorDate.toLocaleString("es-EC", { dateStyle: "full", timeStyle: "short" });
+      return <div className="lowercase text-[10px] ">{formattedDate}</div>;
+    },
   },
   {
     accessorKey: "sensorStatus",
@@ -153,18 +101,21 @@ export const columns: ColumnDef<Sensor>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Estado
+          Estado del Sensor
         </Button>
       )
     },
-    cell: ({ row }) => <div className="">{row.getValue("sensorStatus")==true?'Conetado':'Desconectado'}</div>,
+    cell: ({ row }) => <div className="flex justify-center">
+      {row.getValue("sensorStatus")==true?<Badge><Signal className="w-4 mr-2" />Conectado</Badge>:<Badge variant="destructive"><WifiOff className="w-4 mr-2" />Apagado</Badge>}
+      
+      </div>,
   },
 ]
 
 
 
 export function CardsDataTableSensor() {
-  const [sensors, setSensors] = useState([]);
+  const [sensor, setSensor] = useState<Sensor[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -174,7 +125,7 @@ export function CardsDataTableSensor() {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data,
+    data: sensor,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -191,17 +142,8 @@ export function CardsDataTableSensor() {
       rowSelection,
     },
   })
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiData = await getCats();
-        setSensors(apiData);
-      } catch (error) {
-        console.error("Error fetching data from API:", error);
-      }
-    };
-
-    fetchData();
+  useEffect(() => {
+    getDataSensor().then((sensorData) => setSensor(sensorData));
   }, []);
 
   return (
@@ -210,34 +152,6 @@ export function CardsDataTableSensor() {
         <CardTitle>Datos del Sensor</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columnas <ChevronDownIcon className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -287,7 +201,7 @@ export function CardsDataTableSensor() {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    No hay resultados.
                   </TableCell>
                 </TableRow>
               )}
@@ -297,7 +211,7 @@ export function CardsDataTableSensor() {
         <div className="flex items-center justify-end space-x-2 pt-4">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {table.getFilteredRowModel().rows.length} fila(s) seleccionada.
           </div>
           <div className="space-x-2">
             <Button
@@ -306,7 +220,7 @@ export function CardsDataTableSensor() {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Previous
+              Antes
             </Button>
             <Button
               variant="outline"
@@ -314,7 +228,7 @@ export function CardsDataTableSensor() {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Next
+              Siguiente
             </Button>
           </div>
         </div>

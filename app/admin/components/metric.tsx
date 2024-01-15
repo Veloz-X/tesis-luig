@@ -1,55 +1,37 @@
 'use client'
 import { useTheme } from "next-themes"
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip ,XAxis,YAxis} from "recharts"
+import { useEffect, useState } from "react";
 
-// import { useConfig } from "@/hooks/use-config"
-
-// import { themes } from "@/registry/themes"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-const data = [
-  {
-    temperature: 200,
-    humidity: 240,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-  {
-    temperature: 12.22,
-    humidity: 139,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-  {
-    temperature: 200,
-    humidity: 500,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-  {
-    temperature: 278,
-    humidity: 390,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-  {
-    temperature: 189,
-    humidity: 480,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-  {
-    temperature: 239,
-    humidity: 380,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-  {
-    temperature: 349,
-    humidity: 430,
-    createDate: "2021-09-01T00:00:00.000Z"
-  },
-]
+const getDataSensor = async (): Promise<Sensor[]> => {
+  const sensor  = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/sensors?offset=0&limit=50`
+  );
+  const sensorJson: Sensor[] = await sensor.json();
+  console.log(sensorJson);
+  return sensorJson;
+};
+
+export type Sensor = {
+  id: string
+  sensorStatus: boolean
+  temperature: number
+  humidity: number
+  createDate: string
+  updateDate: string
+}
+
 
 export function CardsMetric() {
-  const { theme: mode } = useTheme()
-  // const [config] = useConfig()
-
-  // const theme = themes.find((theme) => theme.name === config.theme)
+  const [sensor, setSensor] = useState<Sensor[]>([]);
+  useEffect(() => {
+    getDataSensor().then((sensorData) => setSensor(sensorData));
+  }, []);
+  const { theme } = useTheme();
+  const temperatureLineColor = theme === 'light' ? '#ff6600' : '#ff9900'; // Adjust colors based on your preference
+  const humidityLineColor = theme === 'light' ? '#0088cc' : '#00bfff'; // Adjust colors based on your preference
 
   return (
     <Card>
@@ -63,7 +45,7 @@ export function CardsMetric() {
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
-              data={data}
+              data={sensor}
               margin={{
                 top: 5,
                 right: 10,
@@ -76,69 +58,55 @@ export function CardsMetric() {
               <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
               
               <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="rounded-lg border bg-background p-2 shadow-sm">
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Temperatura
-                            </span>
-                            <span className="font-bold text-muted-foreground">
-                              {payload[0].value} C°
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Humedad
-                            </span>
-                            <span className="font-bold">
-                              {payload[1].value} C°
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  }
+  content={({ active, payload }) => {
+    if (active && payload && payload.length) {
+      console.log('Payload:', payload);
+      return (
+        <div className="rounded-lg border bg-background p-2 shadow-sm">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col">
+              <span className="text-[0.70rem] uppercase text-muted-foreground">
+                Temperatura
+              </span>
+              <span className="font-bold text-muted-foreground">
+                {payload[0].value} C°
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[0.70rem] uppercase text-muted-foreground">
+                Humedad
+              </span>
+              <span className="font-bold">
+                {payload[1].value} C°
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
-                  return null
-                }}
-              />
+    return null;
+  }}
+/>
               <Line
                 type="monotone"
                 strokeWidth={2}
                 dataKey="temperature"
+                stroke={temperatureLineColor}
                 activeDot={{
                   r: 6,
                   style: { fill: "var(--theme-primary)", opacity: 0.25 },
                 }}
-                // style={
-                //   {
-                //     stroke: "var(--theme-primary)",
-                //     opacity: 0.25,
-                //     "--theme-primary": `hsl(${
-                //       theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                //     })`,
-                //   } as React.CSSProperties
-                // }
               />
               <Line
                 type="monotone"
                 dataKey="humidity"
+                stroke={humidityLineColor}
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
                   style: { fill: "var(--theme-primary)" },
                 }}
-                // style={
-                //   {
-                //     stroke: "var(--theme-primary)",
-                //     "--theme-primary": `hsl(${
-                //       theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                //     })`,
-                //   } as React.CSSProperties
-                // }
               />
             </LineChart>
           </ResponsiveContainer>
