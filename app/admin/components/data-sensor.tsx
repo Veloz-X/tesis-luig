@@ -36,8 +36,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
 
-const data: Payment[] = [
+const getCats = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sensors?offset=0&limit=25`, {
+    method: "GET",
+  });
+  const data = await res.json();
+  console.log(data);
+  return data;
+};
+
+const data: Sensor[] = [
   {
     sensorStatus: true,
     temperature: 25.36,
@@ -80,7 +90,8 @@ const data: Payment[] = [
   },
 ]
 
-export type Payment = {
+
+export type Sensor = {
   id: string
   sensorStatus: boolean
   temperature: number
@@ -89,8 +100,8 @@ export type Payment = {
   updateDate: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
 
+export const columns: ColumnDef<Sensor>[] = [
 
   {
     accessorKey: "humidity",
@@ -150,7 +161,10 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
+
+
 export function CardsDataTableSensor() {
+  const [sensors, setSensors] = useState([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -177,6 +191,18 @@ export function CardsDataTableSensor() {
       rowSelection,
     },
   })
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiData = await getCats();
+        setSensors(apiData);
+      } catch (error) {
+        console.error("Error fetching data from API:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Card>
