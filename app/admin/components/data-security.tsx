@@ -86,7 +86,7 @@ export const columns: ColumnDef<Notification>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Estado del Sensor
+          Apip de Telegram
         </Button>
       )
     },
