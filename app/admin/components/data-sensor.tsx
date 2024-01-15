@@ -29,7 +29,6 @@ const getDataSensor = async (): Promise<Sensor[]> => {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}/sensors?offset=0&limit=10`
   );
   const sensorJson: Sensor[] = await sensor.json();
-  console.log(sensorJson);
   return sensorJson;
 };
 

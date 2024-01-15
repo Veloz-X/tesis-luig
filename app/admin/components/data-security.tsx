@@ -2,11 +2,6 @@
 
 import * as React from "react"
 import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons"
-import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -20,136 +15,92 @@ import {
 } from "@tanstack/react-table"
 
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge"
+import { Send, Signal, WifiOff } from "lucide-react"
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: true
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: false
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: true
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: false
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: true
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: false
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: true
-  },
-  {
-    id: "m5gr84i9",
-    message: "Se ha Ingresado al sistema de forma exitosa",
-    createDate: "2024-01-13T19:11:52.363Z",
-    updateDate: "2024-01-13T19:11:52.363Z",
-    status: false
-  }
-]
+const getDataSensor = async (): Promise<Notification[]> => {
+  const sensor  = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/notifications?offset=0&limit=10`
+  );
+  const sensorJson: Notification[] = await sensor.json();
+  console.log(sensorJson);
+  return sensorJson;
+};
 
-export type Payment = {
+
+
+export type Notification = {
   id: string
-  message: string
+  content: string
   createDate: string
-  updateDate: string
-  status: boolean
+  notificationSent: boolean
 }
 
-export const columns: ColumnDef<Payment>[] = [
+
+export const columns: ColumnDef<Notification>[] = [
+
+ 
+  {
+    accessorKey: "content",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Notificacion
+        </Button>
+      )
+    },
+    cell: ({ row }) => <div className=" text-start text-xs ">{row.getValue("content")}</div>,
+  },
   {
     accessorKey: "createDate",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Fecha
         </Button>
-      )
+      );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("createDate")}</div>,
+    cell: ({ row }) => {
+      const utcDate = new Date(row.getValue("createDate"));
+      const ecuadorDate = new Date(utcDate.toLocaleString("en-US", { timeZone: "America/Guayaquil" }));
+      const formattedDate = ecuadorDate.toLocaleString("es-EC", { dateStyle: "full", timeStyle: "short" });
+      return <div className="lowercase text-[10px] ">{formattedDate}</div>;
+    },
   },
   {
-    accessorKey: "message",
+    accessorKey: "notificationSent",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Notificaciones
+          Estado del Sensor
         </Button>
       )
     },
-    cell: ({ row }) => <div className="text-xs">{row.getValue("message")}</div>,
-  },
-  {
-    accessorKey: "status",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Estado
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="text-xs">{row.getValue("status")==true?'Alerta':'Normal'}</div>,
+    cell: ({ row }) => <div className="flex justify-center">
+      {row.getValue("notificationSent")==true?<Badge><Send className="w-4 mr-2" />Enviado</Badge>:<Badge variant="destructive"><WifiOff className="w-4 mr-2" />No Enviado</Badge>}
+      
+      </div>,
   },
 ]
 
+
+
 export function CardsDataTableSecurity() {
+  const [sensor, setSensor] = useState<Notification[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -159,7 +110,7 @@ export function CardsDataTableSecurity() {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data,
+    data: sensor,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -176,41 +127,16 @@ export function CardsDataTableSecurity() {
       rowSelection,
     },
   })
+  useEffect(() => {
+    getDataSensor().then((sensorData) => setSensor(sensorData));
+  }, []);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Notificación de Seguridad</CardTitle>
+        <CardTitle>Notificaciones de Seguridad</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columnas <ChevronDownIcon className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
@@ -260,7 +186,7 @@ export function CardsDataTableSecurity() {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    No hay resultados.
                   </TableCell>
                 </TableRow>
               )}
@@ -270,7 +196,7 @@ export function CardsDataTableSecurity() {
         <div className="flex items-center justify-end space-x-2 pt-4">
           <div className="flex-1 text-sm text-muted-foreground">
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {table.getFilteredRowModel().rows.length} fila(s) seleccionada.
           </div>
           <div className="space-x-2">
             <Button
@@ -279,7 +205,7 @@ export function CardsDataTableSecurity() {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Previous
+              Antes
             </Button>
             <Button
               variant="outline"
@@ -287,7 +213,7 @@ export function CardsDataTableSecurity() {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              Next
+              Siguiente
             </Button>
           </div>
         </div>
