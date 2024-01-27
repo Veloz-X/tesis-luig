@@ -52,7 +52,6 @@ export const columns: ColumnDef<Notification>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Notificacion
         </Button>
@@ -84,7 +83,6 @@ export const columns: ColumnDef<Notification>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Apip de Telegram
         </Button>

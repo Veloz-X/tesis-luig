@@ -52,13 +52,12 @@ export const columns: ColumnDef<Sensor>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Humedad
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("humidity")}</div>,
+    cell: ({ row }) => <div className=" text-center">{row.getValue("humidity")} °C</div>,
   },
   {
     accessorKey: "temperature",
@@ -66,13 +65,12 @@ export const columns: ColumnDef<Sensor>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Temperatura
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase text-center">{row.getValue("temperature")}</div>,
+    cell: ({ row }) => <div className=" text-center">{row.getValue("temperature")} %</div>,
   },
   {
     accessorKey: "createDate",
@@ -98,7 +96,6 @@ export const columns: ColumnDef<Sensor>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Estado del Sensor
         </Button>
@@ -106,7 +103,6 @@ export const columns: ColumnDef<Sensor>[] = [
     },
     cell: ({ row }) => <div className="flex justify-center">
       {row.getValue("sensorStatus")==true?<Badge><Signal className="w-4 mr-2" />Conectado</Badge>:<Badge variant="destructive"><WifiOff className="w-4 mr-2" />Apagado</Badge>}
-      
       </div>,
   },
 ]
