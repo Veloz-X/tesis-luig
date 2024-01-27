@@ -57,7 +57,7 @@ export const columns: ColumnDef<Sensor>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className=" text-center">{row.getValue("humidity")} °C</div>,
+    cell: ({ row }) => <div className=" text-center">{row.getValue("humidity")} %</div>,
   },
   {
     accessorKey: "temperature",
@@ -70,7 +70,7 @@ export const columns: ColumnDef<Sensor>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className=" text-center">{row.getValue("temperature")} %</div>,
+    cell: ({ row }) => <div className=" text-center">{row.getValue("temperature")} °C</div>,
   },
   {
     accessorKey: "createDate",
