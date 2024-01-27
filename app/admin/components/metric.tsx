@@ -77,7 +77,7 @@ export function CardsMetric() {
                 Humedad
               </span>
               <span className="font-bold">
-                {payload[1].value} C°
+                {payload[1].value} %
               </span>
             </div>
           </div>
