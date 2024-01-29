@@ -12,6 +12,10 @@ import { signOut,useSession } from "next-auth/react";
 import { CardsDataTableSensor } from './components/data-sensor'
 export default function Home() {
   const { data: session, status } = useSession();
+  const handleRefresh = () => {
+    // Reload the page
+    window.location.reload();
+  };
   return (
     
     <div className='w-full flex bg-gray-100'>
@@ -23,7 +27,7 @@ export default function Home() {
       </div>
       <div className='w-1/2  p-3'>
         <div className='flex space-x-2'>
-          <Button className='font-bold'>
+        <Button className='font-bold' onClick={handleRefresh}>
             <RefreshCcw className="mr-2 h-4 w-4" />
             Actualizar
           </Button>

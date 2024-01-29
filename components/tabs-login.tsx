@@ -22,8 +22,8 @@ import { useRouter } from "next/navigation";
 
 export function TabsLogin() {
     const { data: session, status } = useSession();
-    const [email, setEmail] = useState<string>("usuario.luigi@gmail.com");
-    const [password, setPassword] = useState<string>("Abc1");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [code, setCode] = useState<string>("");
     const [tabsValue, setTabsValue] = useState<string>("check");
     const [errors, setErrors] = useState<string[]>([]);
@@ -43,6 +43,7 @@ export function TabsLogin() {
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(formverifyEmail),
             });
+            setEmail(formverifyEmail.email);
             if (!res.ok) {
                 const errorData = await res.json();
                 toast.error("Error", { description: errorData.message || "El email no se verificó correctamente" });
@@ -53,14 +54,14 @@ export function TabsLogin() {
               setTabsValue("login");
             }
         } catch (error) {
-            toast.error("Error", { description: error.message || "El email no se verificó correctamente" });
+            toast.error("Error", {description: "El email no se verificó correctamente" });
             console.error("Error al verificar el email:", error);
         }
     };
 
     const handleSubmit = async () => {
       setErrors([]);
-  
+      toast.loading("Cargando...");
       const responseNextAuth = await signIn("credentials", {
         email,
         password,
@@ -69,12 +70,13 @@ export function TabsLogin() {
       });
   
       if (responseNextAuth?.error) {
-        setErrors(responseNextAuth.error.split(","));
+        toast.error("Error", { description: responseNextAuth?.error });
         return;
       }
       console.log(responseNextAuth)
   
       router.push("/admin");
+      toast.success("Inicia sesión", { description: "Cuenta verificada." });
   
     };
 
@@ -115,7 +117,7 @@ export function TabsLogin() {
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="login-email">Email</Label>
-              <Input disabled id="login-email" type="text" value={email} onChange={(event) => setEmail(event.target.value)}/>
+              <Input disabled id="login-email" type="text" value={email} />
             </div>
             <div className="space-y-1">
               <Label htmlFor="login-password">Contraseña</Label>

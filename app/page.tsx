@@ -17,8 +17,8 @@ import { TabsLogin } from "@/components/tabs-login";
 export default function Home() {
   const { data: session, status } = useSession();
   const [errors, setErrors] = useState<string[]>([]);
-  const [email, setEmail] = useState<string>("usuario.luigi@gmail.com");
-  const [password, setPassword] = useState<string>("Abc123");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [showTwoFactor, setShowTwoFactor] = useState(false);
   
   const router = useRouter();
