@@ -11,12 +11,16 @@ import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LoginButton } from "@/components/auth/login-button";
+import { TabsLogin } from "@/components/tabs-login";
 
 export default function Home() {
   const { data: session, status } = useSession();
   const [errors, setErrors] = useState<string[]>([]);
   const [email, setEmail] = useState<string>("usuario.luigi@gmail.com");
   const [password, setPassword] = useState<string>("Abc123");
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
+  
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,8 +37,9 @@ export default function Home() {
       setErrors(responseNextAuth.error.split(","));
       return;
     }
+    console.log(responseNextAuth)
 
-    router.push("/admin");
+    // router.push("/admin");
 
   };
   return (
@@ -50,47 +55,13 @@ export default function Home() {
           ANÁLISIS DE TÉCNICAS Y ESTRATEGIAS DE SEGURIDAD EN DISPOSITIVOS IOT
           PARA PROTEGER LOS DATOS TRANSMITIDOS
       </div>
-
-      <form onSubmit={handleSubmit} className="w-full max-w-sm items-center">
-        <div className="grid w-full max-w-sm items-center gap-1.5 space-y-1 pb-3">
-          <Label htmlFor="email" className="font-semibold">
-            Correo
-          </Label>
-          <Input
-            type="email"
-            id="email"
-            placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-
-        <div className="grid w-full max-w-sm items-center gap-1.5 space-y-1">
-          <Label htmlFor="password" className="font-semibold">
-            Contraseña
-          </Label>
-          <Input
-            type="password"
-            id="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Button className="w-full mt-4">
-            Ingresar
-            <SendHorizonal className="ml-2 h-4 w-4" />
-          </Button>
-          <div className="text-center py-4 font-semibold">
+      <div>
+        <TabsLogin />
+        <div className="text-center py-4 font-semibold">
             <div className="text-sm">Ing. Luigi Emanuel Bohorquez Reyes</div>
             <div className="text-sm">Ing. Kristy Johely Alcivar Alvarado</div>
           </div>
-        </div>
-      </form>
-
-      <Toaster/>
+      </div>
 
       {errors.length > 0 && (
         <div className="hidden">

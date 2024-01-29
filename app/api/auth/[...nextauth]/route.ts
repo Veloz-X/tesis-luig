@@ -2,12 +2,14 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
+  
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "email", type: "email", placeholder: "test@test.com" },
+        email: { label: "email", type: "email"},
         password: { label: "Password", type: "password" },
+        code: { label: "Code", type: "code" },
       },
       async authorize(credentials) {
         const res = await fetch(
@@ -17,15 +19,14 @@ const handler = NextAuth({
             body: JSON.stringify({
               email: credentials?.email,
               password: credentials?.password,
+              code: credentials?.code,
             }),
             headers: { "Content-Type": "application/json" },
           }
         );
         const user = await res.json();
         console.log(user);
-
         if (user.error) throw user;
-
         return user;
       },
     }),
@@ -35,6 +36,7 @@ const handler = NextAuth({
       return { ...token, ...user };
     },
     async session({ session, token }) {
+      // console.log(session);
       session.user = token as any;
       return session;
     },
