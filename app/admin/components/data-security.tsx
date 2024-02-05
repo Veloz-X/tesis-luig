@@ -53,7 +53,7 @@ export const columns: ColumnDef<Notification>[] = [
         <Button
           variant="ghost"
         >
-          Notificacion
+          Notificación
         </Button>
       )
     },
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Notification>[] = [
         <Button
           variant="ghost"
         >
-          Apip de Telegram
+          Api de Telegram
         </Button>
       )
     },
