@@ -102,7 +102,10 @@ export const columns: ColumnDef<Sensor>[] = [
       )
     },
     cell: ({ row }) => <div className="flex justify-center">
-      {row.getValue("sensorStatus")==true?<Badge><Signal className="w-4 mr-2" />Conectado</Badge>:<Badge variant="destructive"><WifiOff className="w-4 mr-2" />Apagado</Badge>}
+      {row.getValue("sensorStatus")==true?
+      <Badge><Signal className="w-4 mr-2" />Conectado</Badge>
+      :<Badge variant="destructive"><WifiOff className="w-4 mr-2" />Apagado</Badge>
+      }
       </div>,
   },
 ]
