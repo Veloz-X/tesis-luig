@@ -72,29 +72,29 @@ export function CardsMetric() {
             <LineChart
               data={sensor}
               margin={{
-                top: 5,
+                top: 10,
                 right: 0,
                 left: 0,
-                bottom: 0,
+                bottom: 20,
               }}
             >
               <XAxis
                 className="text-[10px]"
                 dataKey="createDate"
                 tickFormatter={formatTime}
+                label={{ value: 'Tiempo', position: 'insideBottom', offset: -10 }}
               />
-              <YAxis className="text-[10px]" />
+              <YAxis className="text-[10px]" label={{ value: 'Temperatura y Humedad', angle: -90, position: 'insideCenter' }}/>
               <CartesianGrid stroke="#eee" strokeDasharray="1 1" />
 
               <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
-
                     const connectionStatus = payload.find(
                       (entry) => entry.dataKey === "temperature"
                     )?.payload.sensorStatus;
 
-                    const dateAndTime  = payload.find(
+                    const dateAndTime = payload.find(
                       (entry) => entry.dataKey === "temperature"
                     )?.payload.createDate;
 
@@ -109,34 +109,19 @@ export function CardsMetric() {
                     return (
                       <div className="rounded-lg border bg-background p-2 shadow-sm">
                         <div className="grid grid-cols-2 gap-2">
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
+                          <div className="flex flex-col ">
+                            <span className="text-[0.70rem] font-semibold uppercase text-muted-foreground text-orange-400">
                               Temperatura
                             </span>
-                            <span className="font-bold text-muted-foreground">
+                            <span className="font-bold text-muted-foreground text-orange-400">
                               {temperature} C°
                             </span>
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
+                            <span className="text-[0.70rem] uppercase font-semibold  text-muted-foreground text-cyan-500">
                               Humedad
                             </span>
-                            <span className="font-bold">{humidity} %</span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Estado de conexión
-                            </span>
-                            <span className="font-bold pt-2">
-                              {String(connectionStatus)==="true"?<Badge><Signal className="w-4 mr-2" />Conectado</Badge>
-      :<Badge variant="destructive"><WifiOff className="w-4 mr-2" />Apagado</Badge>}
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Fecha y hora
-                            </span>
-                            <span className="font-bold">{formatDate(dateAndTime)}</span>
+                            <span className="font-bold text-cyan-500">{humidity} %</span>
                           </div>
                         </div>
                       </div>
