@@ -58,8 +58,8 @@ export default function Home() {
       <div>
         <TabsLogin />
         <div className="text-center py-4 font-semibold">
-            <div className="text-sm">Ing. Luigi Emanuel Bohorquez Reyes</div>
-            <div className="text-sm">Ing. Kristy Johely Alcivar Alvarado</div>
+            <div className="text-sm">Luigi Emanuel Bohorquez Reyes</div>
+            <div className="text-sm">Kristy Johely Alcivar Alvarado</div>
           </div>
       </div>
 
